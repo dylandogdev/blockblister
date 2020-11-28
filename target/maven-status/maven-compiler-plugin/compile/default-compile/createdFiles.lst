@@ -1,1 +1,9 @@
+com/dylandogdev/blockblister/service/MovieService.class
+com/dylandogdev/blockblister/entities/ConditionEntity.class
+com/dylandogdev/blockblister/entities/MediaEntity.class
+com/dylandogdev/blockblister/repository/MovieRepository.class
 com/dylandogdev/blockblister/BlockblisterApplication.class
+com/dylandogdev/blockblister/dao/MovieDao.class
+com/dylandogdev/blockblister/entities/PriceEntity.class
+com/dylandogdev/blockblister/controllers/MovieController.class
+com/dylandogdev/blockblister/entities/MovieEntity.class
