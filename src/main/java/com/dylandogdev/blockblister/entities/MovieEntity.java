@@ -1,8 +1,6 @@
 package com.dylandogdev.blockblister.entities;
 
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -10,7 +8,6 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @EqualsAndHashCode
-@NoArgsConstructor
 @ToString
 @Entity
 @Table(name="movies")
@@ -35,6 +32,8 @@ public class MovieEntity {
     private List<GenreEntity> genres;
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL)
     private List<MediaEntity> media;
+
+    public MovieEntity() {};
 
     public MovieEntity(String title, String description, String director, int year, int length ) {
         this.title = title;

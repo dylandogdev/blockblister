@@ -1,57 +1,91 @@
 package com.dylandogdev.blockblister;
 
-
+import com.dylandogdev.blockblister.entities.GenreEntity;
 import com.dylandogdev.blockblister.entities.MovieEntity;
-import com.dylandogdev.blockblister.repository.MovieRepository;
-import org.junit.jupiter.api.Test;
+import com.dylandogdev.blockblister.repository.GenreRepository;
+import com.dylandogdev.blockblister.service.MovieService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.Assert;
 
-import java.io.Console;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@DataJpaTest
+@SpringBootTest
 public class MovieServiceTests {
 
     @Autowired
-    MovieRepository repository;
+    MovieService service;
+
+    @Autowired
+    GenreRepository genreRepository;
 
     @Test
-    void testCreateRetrieveMovie() {
-        MovieEntity testMovie = repository.save(
-                new MovieEntity(
-                        "Halloween",
-                        "The night HE came back!",
-                        "David Gordon Green",
-                        2018,
-                        100
-                )
+    void testCreateMovieNoGenres() {
+        MovieEntity movie = service.createNewMovie(
+              "Dracula",
+              "He vants to suck your blood!",
+              "Tod Browning",
+                1931,
+                85,
+                Optional.empty()
         );
-        Assertions.assertNotNull(testMovie);
-        Assertions.assertEquals("Halloween", testMovie.getTitle());
-        Assertions.assertEquals("The night HE came back!", testMovie.getDescription());
-        Assertions.assertEquals("David Gordon Green", testMovie.getDirector());
-        Assertions.assertEquals(2018, testMovie.getYear());
-        Assertions.assertEquals(100, testMovie.getLength());
-    }
-    @Test
-    void testUpdateMovie() {
-        MovieEntity testMovie = repository.save(
-                new MovieEntity(
-                        "Friday the 13th",
-                        "Ki ki ki... ma ma ma...",
-                        "Sean S. Cunningham",
-                        1980,
-                        95
-                )
-        );
-        Integer testId = testMovie.getId();
-        testMovie.setTitle("Friday the 13th Part 2");
-        MovieEntity savedMovie = repository.save(testMovie);
-        Assertions.assertEquals(testId, savedMovie.getId());
-        Assertions.assertEquals("Friday the 13th Part 2", savedMovie.getTitle());
+        Assertions.assertNotNull(movie);
+        Assertions.assertEquals("Dracula", movie.getTitle());
     }
 
-//    void testDeleteMovie() {}
+    @Test
+    void testCreateNewMovieWithGenres() {
+        ArrayList<Integer> genreIds = new ArrayList<>();
+        List<GenreEntity> genres = (List<GenreEntity>) genreRepository.saveAll(
+                new ArrayList<GenreEntity>() {
+                    {
+                        add(new GenreEntity("Slasher"));
+                        add(new GenreEntity("Supernatural"));
+                    }
+                }
+        );
+        genres.stream().forEach(g -> genreIds.add(g.getId()));
+
+        MovieEntity movie = service.createNewMovie(
+            "The Fly",
+                "Be afraid. Be VERY afraid.",
+                "David Cronenberg",
+                1986,
+                96,
+                Optional.of(genreIds)
+        );
+
+        Assertions.assertNotNull(movie);
+        Assertions.assertEquals("The Fly", movie.getTitle());
+        Assertions.assertEquals(2, movie.getGenres().size());
+        Assertions.assertTrue(
+                movie
+                        .getGenres()
+                        .stream()
+                .filter(
+                        g -> g.getGenre()
+                        .equalsIgnoreCase("Slasher")
+                )
+                .findFirst()
+                .isPresent()
+        );
+        Assertions.assertTrue(
+                movie
+                        .getGenres()
+                        .stream()
+                        .filter(
+                                g -> g.getGenre()
+                                        .equalsIgnoreCase("Supernatural")
+                        )
+                        .findFirst()
+                        .isPresent()
+        );
+    }
 }
