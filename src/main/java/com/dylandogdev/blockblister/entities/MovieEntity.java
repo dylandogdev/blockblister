@@ -22,9 +22,17 @@ public class MovieEntity {
     @NotNull
     private  String director;
     @NotNull
-    private int year;
+    private Integer year;
     @NotNull
-    private int length;
+    private Integer length;
+    @Column(name = "tmdb_id")
+    private Integer tmdbId;
+    @Column(name = "image_url")
+    private String imageUrl;
+    @NotNull
+    @ManyToOne(targetEntity = PriceEntity.class)
+    @JoinColumn(name = "price_id")
+    private PriceEntity price;
     @ManyToMany
     @JoinTable(name = "movies_genres",
     joinColumns = @JoinColumn(name = "movie"),
@@ -35,12 +43,13 @@ public class MovieEntity {
 
     public MovieEntity() {};
 
-    public MovieEntity(String title, String description, String director, int year, int length ) {
+    public MovieEntity(String title, String description, String director, Integer year, Integer length, PriceEntity price ) {
         this.title = title;
         this.description = description;
         this.director = director;
         this.year = year;
         this.length = length;
+        this.price = price;
     }
 
     public Integer getId() {
@@ -59,12 +68,20 @@ public class MovieEntity {
         return director;
     }
 
-    public int getYear() {
+    public Integer getYear() {
         return year;
     }
 
-    public int getLength() {
+    public Integer getLength() {
         return length;
+    }
+
+    public Integer getTmdbId() {
+        return tmdbId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public List<GenreEntity> getGenres() {
@@ -83,11 +100,11 @@ public class MovieEntity {
         this.director = director;
     }
 
-    public void setYear(int year) {
+    public void setYear(Integer year) {
         this.year = year;
     }
 
-    public void setLength(int length) {
+    public void setLength(Integer length) {
         this.length = length;
     }
 
@@ -101,5 +118,21 @@ public class MovieEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setTmdbId(Integer tmdbId) {
+        this.tmdbId = tmdbId;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public PriceEntity getPrice() {
+        return price;
+    }
+
+    public void setPrice(PriceEntity price) {
+        this.price = price;
     }
 }

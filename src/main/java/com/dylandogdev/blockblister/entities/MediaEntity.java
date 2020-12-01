@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 public class MediaEntity {
     @Id
     @GeneratedValue
-    private int id;
+    private Integer id;
     @NotNull
     @JsonIgnore
     @ManyToOne

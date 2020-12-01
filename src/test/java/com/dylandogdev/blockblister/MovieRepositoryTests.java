@@ -19,15 +19,20 @@ public class MovieRepositoryTests {
     @Autowired
     MovieRepository repository;
 
+    @Autowired
+    PriceRepository priceRepository;
+
     @Test
     void testCreateRetrieveMovie() {
+        PriceEntity price = priceRepository.save(new PriceEntity("General", new BigDecimal(2.99)));
         MovieEntity testMovie = repository.save(
                 new MovieEntity(
                         "Halloween",
                         "The night HE came back!",
                         "David Gordon Green",
                         2018,
-                        100
+                        100,
+                        price
                 )
         );
         Assertions.assertNotNull(testMovie);
@@ -40,13 +45,15 @@ public class MovieRepositoryTests {
 
     @Test
     void testUpdateMovie() {
+        PriceEntity price = priceRepository.save(new PriceEntity("General", new BigDecimal(2.99)));
         MovieEntity testMovie = repository.save(
                 new MovieEntity(
                         "Friday the 13th",
                         "Ki ki ki... ma ma ma...",
                         "Sean S. Cunningham",
                         1980,
-                        95
+                        95,
+                        price
                 )
         );
         Integer testId = testMovie.getId();
@@ -58,13 +65,15 @@ public class MovieRepositoryTests {
 
     @Test
     void testDeleteMovie() {
+        PriceEntity price = priceRepository.save(new PriceEntity("General", new BigDecimal(2.99)));
         MovieEntity movieToDelete = repository.save(
                 new MovieEntity(
                         "Child's Play",
                         "Evil doll runs amok.",
                         "Todd Holland",
                         1988,
-                        92
+                        92,
+                        price
                 )
         );
         Assertions.assertNotNull(repository.findById(movieToDelete.getId()));
@@ -75,13 +84,15 @@ public class MovieRepositoryTests {
 
     @Test
     void testDeleteMovieById(){
+        PriceEntity price = priceRepository.save(new PriceEntity("General", new BigDecimal(2.99)));
         MovieEntity movieToDeleteById = repository.save(
                 new MovieEntity(
                         "Night of the Living Dead",
                         "They're coming to get you, Barbara!",
                         "George Romero",
                         1968,
-                        87
+                        87,
+                        price
                 )
         );
         repository.deleteById(movieToDeleteById.getId());
@@ -91,6 +102,7 @@ public class MovieRepositoryTests {
 
     @Test
     void testCreateRetrieveDeleteListOfMovies() {
+        PriceEntity price = priceRepository.save(new PriceEntity("General", new BigDecimal(2.99)));
         List<Integer> movieIds = (List<Integer>) new ArrayList<Integer>();
         List<MovieEntity> movies = (List<MovieEntity>) repository.saveAll(
                 new ArrayList<MovieEntity>(){
@@ -101,7 +113,8 @@ public class MovieRepositoryTests {
                                         "One, two, Freddy's coming for you!",
                                         "Wes Craven",
                                         1984,
-                                        90
+                                        90,
+                                        price
                                 )
                         );
                         add(
@@ -110,7 +123,8 @@ public class MovieRepositoryTests {
                                         "He's back and Freddier than ever!",
                                         "Jack Sholder",
                                         1985,
-                                        87
+                                        87,
+                                        price
                                 )
                         );
                     }

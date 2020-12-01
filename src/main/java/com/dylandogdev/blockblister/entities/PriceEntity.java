@@ -18,7 +18,7 @@ public class PriceEntity {
     @NotNull
     @Column(name="price_group")
     private String priceGroup;
-    @NonNull
+    @NotNull
     private BigDecimal price;
 
     public PriceEntity() {};

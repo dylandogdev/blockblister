@@ -48,6 +48,7 @@ public class MovieController {
             @RequestParam String director,
             @RequestParam Integer year,
             @RequestParam Integer length,
+            @RequestParam Integer priceId,
             @RequestParam Optional<List<Integer>> genreIds
     ) {
         return new ResponseEntity<MovieEntity>(
@@ -57,10 +58,42 @@ public class MovieController {
                     director,
                     year,
                     length,
+                    priceId,
                     genreIds
             ),
             new HttpHeaders(),
             HttpStatus.OK
         );
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<MovieEntity> updateMovie(
+            @PathVariable Integer id,
+            @RequestParam String operation,
+            @RequestParam Optional<String> title,
+            @RequestParam Optional<String> description,
+            @RequestParam Optional<String> director,
+            @RequestParam Optional<Integer> year,
+            @RequestParam Optional<Integer> length,
+            @RequestParam Optional<Integer> priceId,
+            @RequestParam Optional<List<Integer>> genreIds,
+            @RequestParam Optional<Integer> tmdbId,
+            @RequestParam Optional<String> imageUrl
+    ) {
+        MovieEntity updatedMovie = service.updateMovie(
+                id,
+                operation,
+                title,
+                description,
+                director,
+                year,
+                length,
+                priceId,
+                genreIds,
+                tmdbId,
+                imageUrl
+        );
+
+        return new ResponseEntity<MovieEntity>(updatedMovie, new HttpHeaders(), HttpStatus.OK);
     }
 }
